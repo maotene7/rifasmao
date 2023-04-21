@@ -52,7 +52,7 @@ function getLatestVersion()
         return null;
     }
 }
-
+ 
 
 function slug($string)
 {

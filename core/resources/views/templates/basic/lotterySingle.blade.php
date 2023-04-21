@@ -46,21 +46,25 @@
                                             <div class="ticket-card__header">
                                                 <h4>@lang('Your Ticket Number')</h4>
                                             </div>
+                                           
+
                                             <div class="ticket-card__body elements">
+                                            <div class="number-input" style="display:none;">
+                                                <input type="text" name="manual-number" class="form-control" placeholder="Ingresa un número"> <i class="la la-close closeinput"></i>
+                            
+                       
+                                                <button type="button"  class="save-number" style="display:none;">Guardar</button>
+                                            </div>
+                                            <button type="button" class="btn btn-md btn--base w-100 enter-number">Ingreso Manual</button>
+
                                                 <input type="hidden" class="numVal" name="number[]">
                                                 <div class="numbers uniqueNumbers mb-4">
                                                     <span>0</span>
                                                     <span>0</span>
                                                     <span>0</span>
                                                     <span>0</span>
-                                                    <span>0</span>
-                                                    <span>0</span>
-                                                    <span>0</span>
-                                                    <span>0</span>
-                                                    <span>0</span>
-                                                    <span>0</span>
                                                 </div>
-                                                <button type="button" class="btn btn-md btn--base w-100 generate">@lang('Generate Number')</button>
+                                                <button type="button" class="btn btn-md btn--base w-100 generate">@lang('Aleatorio')</button>
                                             </div>
                                         </div><!-- ticket-card end -->
                                     </div>
@@ -145,6 +149,12 @@
                                     <h4>@lang('Your Ticket Number')</h4>
                                 </div>
                                 <div class="ticket-card__body elements">
+                                <div class="number-input2" style="display:none;">
+                                    <input type="text" name="manual-number2" class="form-control manual-number2" placeholder="Ingresa un número"><i class="la la-close closeinput2"></i>
+                                    <button type="button" class="btn btn-primary btn-sm save-number2" style="display:none;">Guardar</button>
+                                 </div>
+                                 <button type="button" class="btn btn-md btn--base w-100 generate2">@lang('Ingreso Manual')</button>
+       
                                     <input type="hidden" class="numVal" name="number[]">
                                     <div class="numbers uniqueNumbers mb-4">
                                         <span>0</span>
@@ -158,7 +168,8 @@
                                         <span>0</span>
                                         <span>0</span>
                                     </div>
-                                    <button type="button" class="btn btn-md btn--base w-100 generate">@lang('Generate Number')</button>
+                                    <button type="button" class="btn btn-md btn--base w-100 generate">@lang('Aleatorio')</button>
+
                                 </div>
                             </div>
                         </div>
@@ -171,6 +182,7 @@
                   $('input[name=ticket_quantity]').val(element);
                   $('input[name=total_price]').val(element * {{ $phase->lottery->price }});
                   rAndOm();
+                  rAndOm2();
                   remove();
                   addMoreBtn(element);
               });
@@ -199,7 +211,7 @@
               function rAndOm(){
                   $('.generate').click(function(){
 
-                      var tendigitrandom = Math.floor(1000000000 + Math.random() * 9000000000);
+                      var tendigitrandom = Math.floor(10000 + Math.random() * 90000);
                       var array = tendigitrandom.toString().split('');
                       var newArray = [];
 
@@ -214,9 +226,91 @@
                       $(this).parents('.elements').children('.numVal').val(tendigitrandom);
                   });
               }
+
+
+
+        function rAndOm2(){
+                  $('.generate2').click(function(){
+                        $(this).parents('.elements').children('.number-input2').fadeIn();
+                        $(this).parents('.elements').children('.numbers').addClass('active');
+                  });
+
+            $('input[name="manual-number2"]').keydown(function(event) {
+                  // Si se presiona la tecla Enter
+                  var number= $(this).parents('.elements').children('.number-input2').children('input[name="manual-number2"]').val();
+                if (event.keyCode === 13) {
+                event.preventDefault();
+                // Ejecuta el evento "click" del botón "Guardar"
+                 
+                $.ajaxSetup({
+                        headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.post('/rifasmao/ticket/check-number', { number: number, phase_id: 4 }, function(response) {
+                    
+                    if (response.exists===1) {
+
+                  
+                    iziToast.error({message: 'Este numero ya esta reservado', position: "center"});
+                } else{
+                    $('.save-number2').click();
+                }
+                });
+               
+                }
+            });
+
+
+            $('.save-number2').click(function() {
+    
+                // Obtén el valor ingresado en la caja de texto
+                var number = $(this).parents('.elements').children('.number-input2').children('input[name="manual-number2"]').val();
+
+                // Valida que el valor sea un número de 10 dígitos
+                if (/^\d{4}$/.test(number)) {
+                    // Actualiza los elementos "span" para mostrar el número ingresado
+                    var newArray = number.split('').map(function(digit) {
+                    return `<span>${digit}</span>`;
+                    });
+                
+                    // Actualiza el valor del campo de entrada oculto
+                    $(this).parents('.elements').children('input.numVal').val(number);
+
+                    // Oculta la caja de texto
+                    $(this).parents('.elements').children('.number-input2').fadeOut();
+                    $(this).parents('.elements').children('.numbers').html(newArray);
+                    $(this).parents('.elements').children('.numbers').addClass('active');
+                    $(this).parents('.elements').children('.numbers').removeClass('op-0-3');
+                } else {
+                    // Si el valor no es un número de 10 dígitos, muestra un mensaje de error
+                    alert('Ingresa un número de 4 dígitos'+ number);
+                }
+            });
+            $('.closeinput2').click(function() {
+                $(this).parents('.elements').children('.number-input2').children('input[name="manual-number2"]').val('');
+                var number='0000';
+                    var newArray = number.split('').map(function(digit) {
+                    return `<span>${digit}</span>`;
+                    });
+                   
+                    // Actualiza el valor del campo de entrada oculto
+                    $(this).parents('.elements').children('input.numVal').val(number);
+
+                    // Oculta la caja de texto
+                    $(this).parents('.elements').children('.number-input2').fadeOut();
+                    $(this).parents('.elements').children('.numbers').html(newArray);
+                    $(this).parents('.elements').children('.numbers').addClass('active');
+                    $(this).parents('.elements').children('.numbers').removeClass('op-0-3');
+                $(this).parents('.elements').children('.number-input').fadeOut();
+            });
+
+
+
+        }
               $('.generate').click(function(){
 
-                  var tendigitrandom = Math.floor(1000000000 + Math.random() * 9000000000);
+                  var tendigitrandom = Math.floor(1000 + Math.random() * 9000);
                   var array = tendigitrandom.toString().split('');
                   var newArray = [];
 
@@ -225,11 +319,113 @@
                   });
 
                   $(this).parents('.elements').children('.numbers').html(newArray);
-
                   $(this).parents('.elements').children('.numbers').addClass('active');
                   $(this).parents('.elements').children('.numbers').removeClass('op-0-3');
                   $(this).parents('.elements').children('.numVal').val(tendigitrandom);
               });
+
+              $('.enter-number').click(function() {
+                //$('.number-input').fadeIn();
+                $(this).parents('.elements').children('.number-input').fadeIn();
+
+                $(this).parents('.elements').children('.numbers').addClass('active');
+
+            });
+
+            $('.save-number').click(function() {
+    
+                // Obtén el valor ingresado en la caja de texto
+                var number = $('input[name="manual-number"]').val();
+                
+            
+                // Valida que el valor sea un número de 10 dígitos
+                if (/^\d{4}$/.test(number)) {
+                    var newArray = number.split('').map(function(digit) {
+                    return `<span>${digit}</span>`;
+                    });
+                   
+                    // Actualiza el valor del campo de entrada oculto
+                    $(this).parents('.elements').children('input.numVal').val(number);
+
+                    // Oculta la caja de texto
+                    $(this).parents('.elements').children('.number-input').fadeOut();
+                    $(this).parents('.elements').children('.numbers').html(newArray);
+                    $(this).parents('.elements').children('.numbers').addClass('active');
+                    $(this).parents('.elements').children('.numbers').removeClass('op-0-3');
+
+
+
+                    
+
+
+
+                    
+                } else {
+                    var number='0000';
+                    var newArray = number.split('').map(function(digit) {
+                    return `<span>${digit}</span>`;
+                    });
+                   
+                    // Actualiza el valor del campo de entrada oculto
+                    $(this).parents('.elements').children('input.numVal').val(number);
+
+                    // Oculta la caja de texto
+                    $(this).parents('.elements').children('.number-input').fadeOut();
+                    $(this).parents('.elements').children('.numbers').html(newArray);
+                    $(this).parents('.elements').children('.numbers').addClass('active');
+                      $(this).parents('.elements').children('.numbers').removeClass('op-0-3');
+                    
+                }
+            });
+
+
+            $('input[name="manual-number"]').keydown(function(event) {
+                // Si se presiona la tecla Enter
+                var number=$('input[name="manual-number"]').val();
+                if (event.keyCode === 13) {
+                event.preventDefault();
+                // Ejecuta el evento "click" del botón "Guardar"
+                 
+                $.ajaxSetup({
+                        headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.post('/rifasmao/ticket/check-number', { number: number, phase_id: {{ $phase->id }} }, function(response) {
+                    
+                    if (response.exists===1) {
+
+                  
+                    iziToast.error({message: 'Este numero ya esta reservado', position: "center"});
+                } else{
+                    $('.save-number').click();
+                }
+                });
+               
+                }
+            });
+
+            $('.closeinput').click(function() {
+                $('input[name="manual-number"]').val('');
+                var number='0000';
+                    var newArray = number.split('').map(function(digit) {
+                    return `<span>${digit}</span>`;
+                    });
+                   
+                    // Actualiza el valor del campo de entrada oculto
+                    $(this).parents('.elements').children('input.numVal').val(number);
+
+                    // Oculta la caja de texto
+                    $(this).parents('.elements').children('.number-input').fadeOut();
+                    $(this).parents('.elements').children('.numbers').html(newArray);
+                    $(this).parents('.elements').children('.numbers').addClass('active');
+                    $(this).parents('.elements').children('.numbers').removeClass('op-0-3');
+                $(this).parents('.elements').children('.number-input').fadeOut();
+            });
+            
+        
+
+
     })(jQuery);
 </script>
 @endpush

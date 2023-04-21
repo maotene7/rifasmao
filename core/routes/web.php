@@ -47,6 +47,8 @@ Route::prefix('ticket')->group(function () {
     Route::get('/view/{ticket}', 'TicketController@viewTicket')->name('ticket.view');
     Route::post('/reply/{ticket}', 'TicketController@replyTicket')->name('ticket.reply');
     Route::get('/download/{ticket}', 'TicketController@ticketDownload')->name('ticket.download');
+    Route::post('/check-number', 'TicketController@checkNumber')->name('ticket.mao');
+
 });
 
 

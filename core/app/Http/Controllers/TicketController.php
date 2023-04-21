@@ -9,6 +9,8 @@ use App\Models\SupportTicket;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class TicketController extends Controller
 {
@@ -219,6 +221,19 @@ class TicketController extends Controller
         header('Content-Disposition: attachment; filename="' . $title . '.' . $ext . '";');
         header("Content-Type: " . $mimetype);
         return readfile($full_path);
+    }
+
+    function checkNumber(Request $request)
+    {
+        $number = $request->input('number');
+        $phaseId = $request->input('phase_id');
+    
+        // Busca en la base de datos si el número ya existe en la fase indicada
+        $exists = DB::select("SELECT EXISTS(SELECT * FROM tickets WHERE ticket_number = ? AND phase_id = ?) as exist", [$number, $phaseId])[0]->exist;
+    
+        return response()->json([
+            'exists' => $exists
+        ]);
     }
 
 }

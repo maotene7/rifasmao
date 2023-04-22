@@ -1,10 +1,1 @@
-{"Balance":"Saldo",
-"Home":"Inicio",
-"Lotteries":"Sorteos",
-"Details":"Detalles",
-"About":"Nosotros",
-"Contact": "Contactos"
-
-
-
-}   
+{"Balance":"Saldo","Home":"Inicio","Lotteries":"Sorteos","Details":"Detalles","About":"Nosotros","Contact":"Contactos","Buy":"Comprar","Title":"T\u00edtulo","Start Date":"Fecha Inicio","End Date":"Fecha Fin","Price":"Valor","Sold":"Vendido","Status":"Estado","Referral Commissions":"Comisiones referido","Manage Lottery":"Configura sorteos","Manage Users":"Configura usuarios","Action":"Acci\u00f3n","Buy Ticket":"Comprar boleto","Running":"En curso","Logout":"Salir","Finance":"Finanzas","Deposit":"Deposito","Withdraw":"Retitos","Transactions":"Transacciones","Support":"Soporte","Support Tickets":"Tickets de soporte","Subject":"Descripci\u00f3n","Priority":"Prioridad","Last reply":"\u00daltima respuesta","New Ticket":"Nuevo Ticket","Medium":"Medio","Closed":"Cerrado"}

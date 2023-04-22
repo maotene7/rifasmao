@@ -247,7 +247,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                    $.post('/rifasmao/ticket/check-number', { number: number, phase_id: 4 }, function(response) {
+                    $.post('/ticket/check-number', { number: number, phase_id: 4 }, function(response) {
                     
                     if (response.exists===1) {
 
@@ -391,7 +391,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                    $.post('/rifasmao/ticket/check-number', { number: number, phase_id: {{ $phase->id }} }, function(response) {
+                    $.post('/ticket/check-number', { number: number, phase_id: {{ $phase->id }} }, function(response) {
                     
                     if (response.exists===1) {
 

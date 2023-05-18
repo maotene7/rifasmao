@@ -84,7 +84,7 @@ class UserController extends Controller
             $in['image'] = $filename;
         }
         $user->fill($in)->save();
-        $notify[] = ['success', 'Profile updated successfully.'];
+        $notify[] = ['success', 'perfil actualizado con éxito.'];
         return back()->withNotify($notify);
     }
 
@@ -115,10 +115,10 @@ class UserController extends Controller
                 $password = Hash::make($request->password);
                 $user->password = $password;
                 $user->save();
-                $notify[] = ['success', 'Password changes successfully.'];
+                $notify[] = ['success', 'Contraseña cambiada con éxito.'];
                 return back()->withNotify($notify);
             } else {
-                $notify[] = ['error', 'The password doesn\'t match!'];
+                $notify[] = ['error', 'Las contraseñas no coinciden!'];
                 return back()->withNotify($notify);
             }
         } catch (\PDOException $e) {
@@ -158,16 +158,16 @@ class UserController extends Controller
         $method = WithdrawMethod::where('id', $request->method_code)->where('status', 1)->firstOrFail();
         $user = auth()->user();
         if ($request->amount < $method->min_limit) {
-            $notify[] = ['error', 'Your requested amount is smaller than minimum amount.'];
+            $notify[] = ['error', 'Tu monto de solicitud es menor al mínimo.'];
             return back()->withNotify($notify);
         }
         if ($request->amount > $method->max_limit) {
-            $notify[] = ['error', 'Your requested amount is larger than maximum amount.'];
+            $notify[] = ['error', 'Tu monto de solicitud es menor al máximo.'];
             return back()->withNotify($notify);
         }
 
         if ($request->amount > $user->balance) {
-            $notify[] = ['error', 'You do not have sufficient balance for withdraw.'];
+            $notify[] = ['error', 'No tienes saldo suficiente para participar.'];
             return back()->withNotify($notify);
         }
 
@@ -230,7 +230,7 @@ class UserController extends Controller
         if ($user->ts) {
             $response = verifyG2fa($user,$request->authenticator_code);
             if (!$response) {
-                $notify[] = ['error', 'Wrong verification code'];
+                $notify[] = ['error', 'Código inválido'];
                 return back()->withNotify($notify);
             }
         }
@@ -428,13 +428,13 @@ class UserController extends Controller
         $user = auth()->user();
         //Check Balance is available or not
         if ($user->balance < $total_price) {
-            $notify[] = ['error','Oops! You have no sufficient balance'];
+            $notify[] = ['error','Oops! No tienes saldo suficiente'];
             return back()->withNotify($notify);
         }
 
         //Check Ticket quantity available or not
         if ($phase->available < $ticket_quantity) {
-            $notify[] = ['error','Oops! quantity is not available'];
+            $notify[] = ['error','Oops! no hay cantidad disponible'];
             return back()->withNotify($notify);
         }
 
@@ -461,7 +461,7 @@ class UserController extends Controller
                     if ($sval == '0') {
                         continue;
                     }
-                    $notify[] = ['error','Oops! ticket number must be an integer value'];
+                    $notify[] = ['error','Oops! Tu número de ticket debe ser un entero'];
                     return back()->withNotify($notify);
                 }
             }
@@ -503,7 +503,7 @@ class UserController extends Controller
             'draw_date'=>$phase->end,
             'site_currency'=>$gnl->cur_text
         ]);
-        $notify[] = ['success','You have buy ticket successfully'];
+        $notify[] = ['success','Has comprado tus tickets correctamente'];
         return back()->withNotify($notify);
     }
 

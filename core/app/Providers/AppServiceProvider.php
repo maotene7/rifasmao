@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['request']->server->set('HTTPS', false); //false para queno pida https
+        $this->app['request']->server->set('HTTPS', true); //false para queno pida https
     }
 
     /**

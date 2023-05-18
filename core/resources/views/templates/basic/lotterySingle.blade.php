@@ -161,13 +161,7 @@
                                         <span>0</span>
                                         <span>0</span>
                                         <span>0</span>
-                                        <span>0</span>
-                                        <span>0</span>
-                                        <span>0</span>
-                                        <span>0</span>
-                                        <span>0</span>
-                                        <span>0</span>
-                                    </div>
+                                                                            </div>
                                     <button type="button" class="btn btn-md btn--base w-100 generate">@lang('Aleatorio')</button>
 
                                 </div>
@@ -211,7 +205,7 @@
               function rAndOm(){
                   $('.generate').click(function(){
 
-                      var tendigitrandom = Math.floor(10000 + Math.random() * 90000);
+                      var tendigitrandom = Math.floor(1000 + Math.random() * 90000);
                       var array = tendigitrandom.toString().split('');
                       var newArray = [];
 

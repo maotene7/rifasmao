@@ -161,6 +161,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
         //Draw
         Route::get('lottery/draw','DrawController@manual')->name('lottery.draw.manual');
         Route::post('lottery/draw/win/{id}','DrawController@draw')->name('lottery.draw.win');
+        Route::get('lottery/draw/search/{id}','DrawController@search')->name('lottery.draw.search');
+
         Route::get('lottery/find/ticket/{id}','DrawController@findTicket')->name('lottery.draw.findTicket');
 
         // Deposit Gateway

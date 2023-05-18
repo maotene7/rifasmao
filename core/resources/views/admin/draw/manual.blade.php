@@ -46,6 +46,12 @@
     </div>
 </div>
     @if($phase)
+    <form action="{{ route('admin.lottery.draw.search',$phase->id) }}" method="GET">
+    <div class="form-group">
+        <input type="text" name="q" class="form-control" placeholder="Buscar tickets...">
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
     <form action="{{ route('admin.lottery.draw.win',$phase->id) }}" method="post">
         @csrf
         <div class="row result_panle">

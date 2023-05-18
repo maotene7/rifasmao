@@ -32,7 +32,19 @@ class DrawController extends Controller
         $empty_message = "Manual Draw Lottery not found";
         return view('admin.draw.manual',compact('pageTitle','manuals','empty_message','phase','tickets'));
     }
+    public function search(Request $request,$id)
+    {
+        $q = $request->input('q');
+        $pageTitle = "Manual Draw";
+        $manuals = Phase::where('at_dr',0)->where('draw_status',0)->where('status',1)->where('end','<',Carbon::now()->toDateTimeString())->with('lottery')->get();
+        $empty_message = "Manual Draw Lottery not found";
 
+        $phase = $manuals->where('id',$id)->first();
+        $tickets = Ticket::where('phase_id',$id)->where('ticket_number','like','%'.$q)->with('user')->get();
+
+        return view('admin.draw.manual',compact('pageTitle','manuals','empty_message','phase','tickets'));
+    }
+    
     public function draw(Request $request,$id){
         $request->validate([
             'number'=>'nullable|array',

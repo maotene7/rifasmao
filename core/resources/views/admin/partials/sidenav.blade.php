@@ -216,6 +216,31 @@
                         </ul>
                     </div>
                 </li>
+<!-- PLANS --> 
+<li class="sidebar-menu-item sidebar-dropdown">
+                    <a href="javascript:void(0)" class="{{menuActive('admin.plans*',3)}}">
+                        <i class="menu-icon la la-bank"></i>
+                        <span class="menu-title">@lang('Plans') </span>                        
+                    </a>
+                    <div class="sidebar-submenu {{menuActive('admin.plans*',2)}} ">
+                        <ul>
+
+                            <li class="sidebar-menu-item {{menuActive('admin.plans.method.index')}}">
+                                <a href="{{route('admin.plans.method.index')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Plan List')</span>
+                                </a>
+                            </li>
+
+                            
+
+
+                        </ul>
+                    </div>
+                </li>
+
+
+
 
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a href="javascript:void(0)" class="{{menuActive('admin.withdraw*',3)}}">
@@ -391,7 +416,7 @@
                         <span class="menu-title">@lang('General Setting')</span>
                     </a>
                 </li>
-
+ 
                 <li class="sidebar-menu-item {{menuActive('admin.setting.logo.icon')}}">
                     <a href="{{route('admin.setting.logo.icon')}}" class="nav-link">
                         <i class="menu-icon las la-images"></i>

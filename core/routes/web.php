@@ -204,6 +204,17 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 
         });
 
+        // Plans SYSTEM
+        Route::name('plans.')->prefix('plans')->group(function(){
+            Route::get('method/', 'PlansController@methods')->name('method.index');
+
+
+            Route::get('method/edit/{id}', 'PlansController@edit')->name('method.edit');
+            Route::get('method/create', 'PlansController@create')->name('method.create');
+
+
+
+        });
 
         // WITHDRAW SYSTEM
         Route::name('withdraw.')->prefix('withdraw')->group(function(){

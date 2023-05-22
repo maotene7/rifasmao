@@ -7,6 +7,7 @@ use App\Models\GeneralSetting;
 use App\Models\Language;
 use App\Models\Page;
 use App\Models\Phase;
+use App\Models\Plans;
 use App\Models\Subscriber;
 use App\Models\SupportAttachment;
 use App\Models\SupportMessage;
@@ -186,7 +187,9 @@ class SiteController extends Controller
     public function lotterySingle($id)
     {
         $phase = Phase::findOrFail($id);
-        $pageTitle = $phase->lottery->name." Details";
+        $plan =Plans::orderBy('status','desc')->orderBy('id')->get();
+
+        $pageTitle = $phase->lottery->name." Detalle";
         if ($phase->end <= Carbon::now()) {
             $notify[] = ['error','Oops! Time Out'];
             return redirect()->route('home')->withNotify($notify);
@@ -195,7 +198,7 @@ class SiteController extends Controller
             $notify[] = ['error','Oops! Thats not started'];
             return redirect()->route('home')->withNotify($notify);
         }
-        return view($this->activeTemplate . 'lotterySingle', compact('pageTitle','phase'));
+        return view($this->activeTemplate . 'lotterySingle', compact('pageTitle','phase','plan'));
     }
 
     public function subscribe(Request $request){

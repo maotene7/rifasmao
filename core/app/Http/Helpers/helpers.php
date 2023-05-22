@@ -667,6 +667,10 @@ function imagePath()
         'path' => 'assets/images/gateway',
         'size' => '800x800',
     ];
+    $data['plans'] = [
+        'path' => 'assets/images/lottery',
+        'size' => '128x123',
+    ];
     $data['verify'] = [
         'withdraw'=>[
             'path'=>'assets/images/verify/withdraw'

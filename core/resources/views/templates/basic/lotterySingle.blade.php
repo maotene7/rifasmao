@@ -27,7 +27,7 @@
                         <div class="lottery-details-body" >
                             <div class="top-part">
                                  <div class="left">
-                                    <!-- <h4>@lang('$ hasta la meta'): {{ __($phase->available) }}</h4> -->
+                                 <h4>@lang('Porcentaje Completado'): {{ round(($phase->salled / $phase->quantity)*100, 2)    }} %</h4>
                                 </div> 
                                 @auth
                                     <div class="middle">

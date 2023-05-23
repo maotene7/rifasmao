@@ -49,7 +49,7 @@
                                              role="progressbar" aria-valuenow="{{ ($phase->salled/$phase->quantity)*100 }}" aria-valuemin="0" aria-valuemax="100"
                                              style="width: {{ ($phase->salled/$phase->quantity)*100 }}%"></div>
                                     </div>
-                                    <span class="fs--14px">{{ ($phase->salled/$phase->quantity)*100 }}%</span>
+                                    <span class="fs--14px">{{ round(($phase->salled/$phase->quantity)*100,2) }}%</span>
                                 </td>
                                 <td data-label="@lang('Status')">
                                     @if($phase->draw_status == 1)

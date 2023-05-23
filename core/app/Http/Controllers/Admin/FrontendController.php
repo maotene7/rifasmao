@@ -42,7 +42,7 @@ class FrontendController extends Controller
         $pageTitle = 'SEO Configuration';
         $seo = Frontend::where('data_keys', 'seo.data')->first();
         if(!$seo){
-            $data_values = '{"keywords":["admin","blog"],"description":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit","social_title":"WEBSITENAME","social_description":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit","image":null}';
+            $data_values = '{"keywords":["admin","blog"],"description":"DESPEGA TU SUERTE","image":null}';
             $data_values = json_decode($data_values, true);
             $frontend = new Frontend();
             $frontend->data_keys = 'seo.data';

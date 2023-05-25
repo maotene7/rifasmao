@@ -17,13 +17,13 @@
                             <div class="account-thumb-area text-center">
                                 <h3 class="title">@lang('Welcome Back to') {{ $general->sitename }}</h3>
                             </div>
-                           <!--  <a href="{{ route('user.redirect', 'facebook') }}" class="btn btn-primary w-100">
+                            <a href="{{ route('user.redirect', 'facebook') }}" class="btn btn-primary w-100">
         Entrar con Facebook
     </a>
     <hr>
     <br>
     <br>
-    <label>O usa tu usuario y contraseña</label> -->
+    <label>O usa tu usuario y contraseña</label>
 
                             <div class="form-group">
                                 <label>@lang('Username & Email') <sup class="text-danger">*</sup></label>

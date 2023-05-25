@@ -6,8 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
+
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
+
 {
     /*
     |--------------------------------------------------------------------------
@@ -114,4 +119,39 @@ class LoginController extends Controller
         $pageTitle = 'Account Recovery';
         return view('admin.reset', compact('pageTitle'));
     }
+
+    public function mao($provider)
+    {
+        return Socialite::driver($provider)->redirect();
+    }
+
+public function handleProviderCallback($provider)
+{
+    $user = Socialite::driver($provider)->user();
+
+    // Verificar si el usuario ya está registrado en tu base de datos
+    $existingUser = User::where('email', $user->getEmail())->first();
+
+    if ($existingUser) {
+        // Si el usuario ya existe, inicia sesión automáticamente
+        Auth::login($existingUser);
+    } else {
+        // Si el usuario no existe, puedes redirigirlo a un formulario de registro con los datos de Facebook
+        // o crear un nuevo usuario automáticamente
+
+        // Ejemplo: Crear un nuevo usuario automáticamente
+        $newUser = new User();
+        $newUser->name = $user->getName();
+        $newUser->email = $user->getEmail();
+        // Otros campos necesarios para el registro
+        $newUser->save();
+
+        // Inicia sesión con el nuevo usuario
+        Auth::login($newUser);
+    }
+
+    // Redirige al usuario a la página deseada después del inicio de sesión
+    return redirect()->intended($this->redirectPath());
+}
+
 }

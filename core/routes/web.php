@@ -62,6 +62,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
     Route::namespace('Auth')->group(function () {
         Route::get('/', 'LoginController@showLoginForm')->name('login');
         Route::post('/', 'LoginController@login')->name('login');
+      
         Route::get('logout', 'LoginController@logout')->name('logout');
         // Admin Password Reset
         Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
@@ -377,6 +378,14 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 Route::name('user.')->group(function () {
     Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('/login', 'Auth\LoginController@login');
+    //facebook
+    Route::get('/login/{provider}', 'Auth\LoginController@mao')->name('redirect');
+    //Route::get('/login/callback', 'Auth\LoginController@handleProviderCallback')->name('mao');
+    Route::get('/login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('mao');
+
+
+
+    //
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
     Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');

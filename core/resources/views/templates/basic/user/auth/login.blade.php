@@ -10,12 +10,21 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="account-wrapper">
+                  
                         <form class="account-form" method="POST" action="{{ route('user.login')}}" onsubmit="return submitUserForm();">
                             @csrf
 
                             <div class="account-thumb-area text-center">
                                 <h3 class="title">@lang('Welcome Back to') {{ $general->sitename }}</h3>
                             </div>
+                           <!--  <a href="{{ route('user.redirect', 'facebook') }}" class="btn btn-primary w-100">
+        Entrar con Facebook
+    </a>
+    <hr>
+    <br>
+    <br>
+    <label>O usa tu usuario y contraseña</label> -->
+
                             <div class="form-group">
                                 <label>@lang('Username & Email') <sup class="text-danger">*</sup></label>
                                 <input type="text" name="username" value="{{ old('username') }}" placeholder="@lang('Username & Email')" class="form--control" required>
@@ -38,6 +47,8 @@
                             <button type="submit" id="recaptcha" class="btn btn--base w-100">@lang('Login Now')</button>
                             <p class="text-center mt-3"><span class="text-white">@lang('New to') {{ $general->sitename }}?</span> <a href="{{ route('user.register') }}" class="text--base">@lang('Register here')</a></p>
                         </form>
+                        
+
                     </div>
                 </div>
             </div>

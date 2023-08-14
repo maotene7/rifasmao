@@ -84,7 +84,7 @@ class UserController extends Controller
             $in['image'] = $filename;
         }
         $user->fill($in)->save();
-        $notify[] = ['success', 'Profile updated successfully.'];
+        $notify[] = ['success', 'perfil actualizado con �xito.'];
         return back()->withNotify($notify);
     }
 
@@ -115,10 +115,10 @@ class UserController extends Controller
                 $password = Hash::make($request->password);
                 $user->password = $password;
                 $user->save();
-                $notify[] = ['success', 'Password changes successfully.'];
+                $notify[] = ['success', 'Contrase�a cambiada con �xito.'];
                 return back()->withNotify($notify);
             } else {
-                $notify[] = ['error', 'The password doesn\'t match!'];
+                $notify[] = ['error', 'Las contrase�as no coinciden!'];
                 return back()->withNotify($notify);
             }
         } catch (\PDOException $e) {
@@ -158,16 +158,16 @@ class UserController extends Controller
         $method = WithdrawMethod::where('id', $request->method_code)->where('status', 1)->firstOrFail();
         $user = auth()->user();
         if ($request->amount < $method->min_limit) {
-            $notify[] = ['error', 'Your requested amount is smaller than minimum amount.'];
+            $notify[] = ['error', 'Tu monto de solicitud es menor al m�nimo.'];
             return back()->withNotify($notify);
         }
         if ($request->amount > $method->max_limit) {
-            $notify[] = ['error', 'Your requested amount is larger than maximum amount.'];
+            $notify[] = ['error', 'Tu monto de solicitud es menor al m�ximo.'];
             return back()->withNotify($notify);
         }
 
         if ($request->amount > $user->balance) {
-            $notify[] = ['error', 'You do not have sufficient balance for withdraw.'];
+            $notify[] = ['error', 'No tienes saldo suficiente para participar.'];
             return back()->withNotify($notify);
         }
 
@@ -230,7 +230,7 @@ class UserController extends Controller
         if ($user->ts) {
             $response = verifyG2fa($user,$request->authenticator_code);
             if (!$response) {
-                $notify[] = ['error', 'Wrong verification code'];
+                $notify[] = ['error', 'C�digo inv�lido'];
                 return back()->withNotify($notify);
             }
         }
@@ -397,6 +397,13 @@ class UserController extends Controller
     }
 
     public function buyTicket(Request $request){
+        $number = $request->input('number'); // Recibir el valor de "number[]"
+        $price = $request->input('price');
+        foreach ($number as $value) {
+            // Hacer algo con cada valor del array
+            $ticket_quantity = $value;        
+        }
+
         $request->validate([
             'lottery_id'=>'required',
             'number'=>'required|array',
@@ -405,9 +412,9 @@ class UserController extends Controller
             'number.*.required'=>'All Ticket Number Field is required',
         ]);
 
-        $ticket_quantity = collect($request->number)->count();
+      
 
-        $phase = Phase::where('id',$request->phase_id)->where('draw_status',0)->where('status',1)->where('end','>=',Carbon::now()->toDateTimeString())->where('quantity','>=',$ticket_quantity)->first();
+        $phase = Phase::where('id',$request->phase_id)->where('draw_status',0)->where('status',1)->where('end','>=',Carbon::now()->toDateTimeString())->first();
 
         //Check phase is exist or not
         if (!$phase) {
@@ -423,20 +430,20 @@ class UserController extends Controller
             return back()->withNotify($notify);
         }
 
-        $total_price = $phase->lottery->price * $ticket_quantity;
+        $total_price = $request->price;
 
         $user = auth()->user();
         //Check Balance is available or not
         if ($user->balance < $total_price) {
-            $notify[] = ['error','Oops! You have no sufficient balance'];
+            $notify[] = ['error','Oops! No tienes saldo suficiente'];
             return back()->withNotify($notify);
         }
 
         //Check Ticket quantity available or not
-        if ($phase->available < $ticket_quantity) {
-            $notify[] = ['error','Oops! quantity is not available'];
+       /*  if ($phase->available < $ticket_quantity) {
+            $notify[] = ['error','Oops! no hay cantidad disponible'];
             return back()->withNotify($notify);
-        }
+        } */
 
         //Check End time
         if ($phase->end <= Carbon::now()) {
@@ -444,7 +451,7 @@ class UserController extends Controller
             return redirect()->route('home')->withNotify($notify);
         }
 
-        //Check Start time
+            //Check Start time
         if (($phase->start > Carbon::now())) {
             $notify[] = ['error','Oops! That\'s not started'];
             return redirect()->route('home')->withNotify($notify);
@@ -461,7 +468,7 @@ class UserController extends Controller
                     if ($sval == '0') {
                         continue;
                     }
-                    $notify[] = ['error','Oops! ticket number must be an integer value'];
+                    $notify[] = ['error','Oops! Tu n�mero de ticket debe ser un entero'];
                     return back()->withNotify($notify);
                 }
             }
@@ -470,15 +477,15 @@ class UserController extends Controller
                 'phase_id'=>$request->phase_id,
                 'user_id'=>$user->id,
                 'ticket_number'=>$value,
-                'total_price'=>$phase->lottery->price,
+                'total_price'=>$total_price ,
                 'status'=>1,
             ]);
         }
 
         $user->balance -= $total_price;
         $user->save();
-        $phase->available -= $ticket_quantity;
-        $phase->salled += $ticket_quantity;
+        $phase->available -= $total_price;
+        $phase->salled += $total_price;
         $phase->save();
 
         Transaction::create([
@@ -503,7 +510,7 @@ class UserController extends Controller
             'draw_date'=>$phase->end,
             'site_currency'=>$gnl->cur_text
         ]);
-        $notify[] = ['success','You have buy ticket successfully'];
+        $notify[] = ['success','Has comprado tus tickets correctamente'];
         return back()->withNotify($notify);
     }
 

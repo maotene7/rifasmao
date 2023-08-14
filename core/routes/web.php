@@ -62,6 +62,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
     Route::namespace('Auth')->group(function () {
         Route::get('/', 'LoginController@showLoginForm')->name('login');
         Route::post('/', 'LoginController@login')->name('login');
+      
         Route::get('logout', 'LoginController@logout')->name('logout');
         // Admin Password Reset
         Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
@@ -161,6 +162,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
         //Draw
         Route::get('lottery/draw','DrawController@manual')->name('lottery.draw.manual');
         Route::post('lottery/draw/win/{id}','DrawController@draw')->name('lottery.draw.win');
+        Route::get('lottery/draw/search/{id}','DrawController@search')->name('lottery.draw.search');
+
         Route::get('lottery/find/ticket/{id}','DrawController@findTicket')->name('lottery.draw.findTicket');
 
         // Deposit Gateway
@@ -202,6 +205,17 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 
         });
 
+        // Plans SYSTEM
+        Route::name('plans.')->prefix('plans')->group(function(){
+            Route::get('method/', 'PlansController@methods')->name('method.index');
+
+
+            Route::get('method/edit/{id}', 'PlansController@edit')->name('method.edit');
+            Route::get('method/create', 'PlansController@create')->name('method.create');
+
+
+
+        });
 
         // WITHDRAW SYSTEM
         Route::name('withdraw.')->prefix('withdraw')->group(function(){
@@ -364,6 +378,14 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
 Route::name('user.')->group(function () {
     Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('/login', 'Auth\LoginController@login');
+    //facebook
+    Route::get('/login/{provider}', 'Auth\LoginController@mao')->name('redirect');
+    //Route::get('/login/callback', 'Auth\LoginController@handleProviderCallback')->name('mao');
+    Route::get('/login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('mao');
+
+
+
+    //
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
     Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');

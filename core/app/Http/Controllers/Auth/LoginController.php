@@ -7,6 +7,11 @@ use App\Models\Extension;
 use App\Models\UserLogin;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;    
+
+
 
 
 class LoginController extends Controller
@@ -171,6 +176,57 @@ class LoginController extends Controller
 
         return redirect()->route('user.home');
     }
+    public function mao($provider)
+    {
+        return Socialite::driver($provider)->redirect();
+    }
 
+    public function handleProviderCallback($provider)
+    {
+        $user = Socialite::driver($provider)->user();
+    
+        // Verificar si el usuario ya está registrado en tu base de datos
+        $existingUser = User::where('email', $user->getEmail())->first();
+       // echo ('este es el user'. json_encode($user));
+        
+    
+        if ($existingUser) {
+            Auth::login($existingUser);
+        } else {
+            // Si el usuario no existe, crea una instancia de RegisterController y utiliza su método register para crear un nuevo usuario automáticamente
+            $registerController = app(RegisterController::class);
+    
+            $request = new Request([
+                'name' => $user->getName(),
+                'email' => $user->getEmail(),
+                'password' => $user->getId(),
+                'firstname' => $user->getName(),
+                'lastname' => '',
+                'username' => $user->getName(),
 
+                
+                
+                // Otros campos necesarios para el registro
+            ]);
+          
+            // Llama al método register del controlador RegisterController
+            $userModel = $registerController->registerFacebook($request);
+            /* $userMao = User::make([
+                'name' => $userModel->name,
+                'email' => $userModel->email,
+                'password' => $userModel->password,
+                // Otros campos necesarios para el registro
+            ]); */
+             // Intenta iniciar sesión con el nuevo usuario utilizando el objeto Request actual
+      
+            // Auth::login($userMao);
+        
+  
+        }
+    
+        // Redirige al usuario a la página deseada después del inicio de sesión
+        return redirect()->intended($this->redirectPath());
+    }
+     
+ 
 }

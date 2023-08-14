@@ -11,7 +11,6 @@
                                 <th>@lang('Title')</th>
                                 <th>@lang('Start Date')</th>
                                 <th>@lang('End Date')</th>
-                                <th>@lang('Price')</th>
                                 <th>@lang('Sold')</th>
                                 <th>@lang('Status')</th>
                                 <th>@lang('Action')</th>
@@ -29,14 +28,13 @@
                                     </td>
                                     <td data-label="@lang('Start Date')">{{ @showDateTime($phase->start, 'Y-m-d') }}</td>
                                     <td data-label="@lang('End Date')">{{ @showDateTime($phase->end, 'Y-m-d') }}</td>
-                                    <td data-label="@lang('Price')">{{ showAmount($phase->lottery->price) }} {{ $general->cur_text }}</td>
                                     <td data-label="@lang('Sold')">
                                         <div class="progress lottery--progress">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated"
                                                  role="progressbar" aria-valuenow="{{ ($phase->salled/$phase->quantity)*100 }}" aria-valuemin="0" aria-valuemax="100"
                                                  style="width: {{ ($phase->salled/$phase->quantity)*100 }}%"></div>
                                         </div>
-                                        <span class="fs--14px">{{ ($phase->salled/$phase->quantity)*100 }}%</span>
+                                        <span class="fs--14px">{{ round(($phase->salled/$phase->quantity)*100,2) }}%</span>
                                     </td>
                                     <td data-label="@lang('Status')">
                                         @if($phase->draw_status == 1)
